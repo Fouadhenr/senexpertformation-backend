@@ -44,7 +44,9 @@ public class JwtUtil {
 
 	public String generateToken(UserDetails userDetails) {
 		Map<String, Object> claims = new HashMap<>();
-		claims.put("roles", userDetails.getAuthorities());
+		// On extrait juste le nom du rôle (String) au lieu de l'objet entier
+		claims.put("roles", userDetails.getAuthorities().stream().map(authority -> authority.getAuthority())
+				.collect(java.util.stream.Collectors.toList()));
 		return createToken(claims, userDetails.getUsername());
 	}
 

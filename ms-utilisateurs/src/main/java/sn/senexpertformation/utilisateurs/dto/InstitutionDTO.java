@@ -5,7 +5,6 @@ public class InstitutionDTO {
 	private String typeInstitution;
 	private String adresse;
 	private String secteurActivite;
-	private String statutValidation;
 
 	public String getRaisonSociale() {
 		return raisonSociale;
@@ -37,13 +36,5 @@ public class InstitutionDTO {
 
 	public void setSecteurActivite(String secteurActivite) {
 		this.secteurActivite = secteurActivite;
-	}
-
-	public String getStatutValidation() {
-		return statutValidation;
-	}
-
-	public void setStatutValidation(String statutValidation) {
-		this.statutValidation = statutValidation;
 	}
 }

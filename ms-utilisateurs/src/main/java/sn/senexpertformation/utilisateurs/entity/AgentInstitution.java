@@ -1,10 +1,23 @@
 package sn.senexpertformation.utilisateurs.entity;
 
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
-@Table(name = "agents_institution")
+@DiscriminatorValue("AgentInstitution")
 public class AgentInstitution extends Utilisateur {
-	// Pas d'attributs supplémentaires
+
+	@ManyToOne
+	@JoinColumn(name = "institution_id")
+	private Institution institution;
+
+	public Institution getInstitution() {
+		return institution;
+	}
+
+	public void setInstitution(Institution institution) {
+		this.institution = institution;
+	}
 }

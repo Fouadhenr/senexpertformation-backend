@@ -33,22 +33,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		String username = null;
 		String jwt = null;
 
-		// Récupérer le token du header Authorization
 		if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
 			jwt = authorizationHeader.substring(7);
-			username = jwtUtil.extractUsername(jwt);
+			try {
+				username = jwtUtil.extractUsername(jwt);
+			} catch (Exception e) {
+				// Token invalide ou expiré — on laisse passer sans authentifier
+				// Spring Security gérera l'accès selon les règles de SecurityConfig
+			}
 		}
 
-		// Si on a un nom d'utilisateur et qu'aucune authentification n'est en cours
 		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-			UserDetails userDetails = this.customUserDetailsService.loadUserByUsername(username);
-
-			// Valider le token
-			if (jwtUtil.validateToken(jwt, userDetails)) {
-				UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-						userDetails, null, userDetails.getAuthorities());
-				authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-				SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+			try {
+				UserDetails userDetails = this.customUserDetailsService.loadUserByUsername(username);
+				if (jwtUtil.validateToken(jwt, userDetails)) {
+					UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails,
+							null, userDetails.getAuthorities());
+					authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+					SecurityContextHolder.getContext().setAuthentication(authToken);
+				}
+			} catch (Exception e) {
+				// Utilisateur non trouvé ou token invalide — on continue sans authentifier
 			}
 		}
 		filterChain.doFilter(request, response);

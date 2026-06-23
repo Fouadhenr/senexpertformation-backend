@@ -1,11 +1,10 @@
 package sn.senexpertformation.utilisateurs.entity;
 
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "administrateurs")
+@DiscriminatorValue("Administrateur")
 public class Administrateur extends Utilisateur {
-
-	// répresente l'administrateur du plateforme
+	// Représente l'administrateur de la plateforme
 }
