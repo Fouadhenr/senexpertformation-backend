@@ -152,4 +152,31 @@ public class UtilisateurController {
 	public ResponseEntity<Utilisateur> getUtilisateur(@PathVariable Long id) {
 		return ResponseEntity.ok(utilisateurService.getUtilisateurById(id));
 	}
+
+	// ===================== ENDPOINTS POUR FEIGN CLIENT (COMMUNICATION
+	// INTER-MICROSERVICES) =====================
+
+	@GetMapping("/administrateurs/{id}")
+	public ResponseEntity<Administrateur> getAdministrateurById(@PathVariable Long id) {
+		Administrateur admin = utilisateurService.getAdministrateurById(id);
+		return ResponseEntity.ok(admin);
+	}
+
+	@GetMapping("/agents/{id}")
+	public ResponseEntity<AgentInstitution> getAgentById(@PathVariable Long id) {
+		AgentInstitution agent = utilisateurService.getAgentById(id);
+		return ResponseEntity.ok(agent);
+	}
+
+	@GetMapping("/particuliers/{id}")
+	public ResponseEntity<Particulier> getParticulierById(@PathVariable Long id) {
+		Particulier particulier = utilisateurService.getParticulierById(id);
+		return ResponseEntity.ok(particulier);
+	}
+
+	@GetMapping("/institutions/{id}")
+	public ResponseEntity<Institution> getInstitutionById(@PathVariable Long id) {
+		Institution institution = utilisateurService.getInstitutionById(id);
+		return ResponseEntity.ok(institution);
+	}
 }

@@ -148,4 +148,26 @@ public class UtilisateurService {
 	public Role creerRole(Role role) {
 		return roleRepository.save(role);
 	}
+
+	// ===================== MÉTHODES POUR FEIGN CLIENT =====================
+
+	public Administrateur getAdministrateurById(Long id) {
+		return administrateurRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Administrateur non trouvé avec l'id: " + id));
+	}
+
+	public AgentInstitution getAgentById(Long id) {
+		return agentInstitutionRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Agent non trouvé avec l'id: " + id));
+	}
+
+	public Particulier getParticulierById(Long id) {
+		return particulierRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Particulier non trouvé avec l'id: " + id));
+	}
+
+	public Institution getInstitutionById(Long id) {
+		return institutionRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Institution non trouvée avec l'id: " + id));
+	}
 }
