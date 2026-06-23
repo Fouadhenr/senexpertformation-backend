@@ -1,0 +1,93 @@
+version: '3.8'
+
+services:
+
+  # ==================== BASE DE DONNÉES UTILISATEURS ====================
+  pg-utilisateurs:
+    image: postgres:16
+    container_name: pg-utilisateurs
+    environment:
+      POSTGRES_DB: db_utilisateurs
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_utilisateurs_data:/var/lib/postgresql/data
+    networks:
+      - senexpert-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d db_utilisateurs"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ==================== BASE DE DONNÉES FORMATIONS ====================
+  pg-formations:
+    image: postgres:16
+    container_name: pg-formations
+    environment:
+      POSTGRES_DB: db_formations
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - pg_formations_data:/var/lib/postgresql/data
+    networks:
+      - senexpert-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d db_formations"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ==================== MICROSERVICE UTILISATEURS ====================
+  ms-utilisateurs:
+    build:
+      context: ./ms-utilisateurs
+      dockerfile: Dockerfile
+    container_name: ms-utilisateurs
+    ports:
+      - "8081:8081"
+    environment:
+      DB_HOST: pg-utilisateurs
+      DB_PORT: 5432
+      DB_NAME: db_utilisateurs
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+    depends_on:
+      pg-utilisateurs:
+        condition: service_healthy
+    networks:
+      - senexpert-network
+
+  # ==================== MICROSERVICE FORMATIONS ====================
+  ms-formations:
+    build:
+      context: ./ms-formations
+      dockerfile: Dockerfile
+    container_name: ms-formations
+    ports:
+      - "8082:8082"
+    environment:
+      DB_HOST: pg-formations
+      DB_PORT: 5432
+      DB_NAME: db_formations
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+    depends_on:
+      pg-formations:
+        condition: service_healthy
+    networks:
+      - senexpert-network
+
+# ==================== VOLUMES ====================
+volumes:
+  pg_utilisateurs_data:
+  pg_formations_data:
+
+# ==================== RÉSEAU ====================
+networks:
+  senexpert-network:
+    driver: bridge
