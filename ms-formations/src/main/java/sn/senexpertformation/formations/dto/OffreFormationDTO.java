@@ -1,47 +1,15 @@
-package sn.senexpertformation.formations.entity;
+package sn.senexpertformation.formations.dto;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-
-@Entity
-@Table(name = "offres_formation")
-public class OffreFormation {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-
+public class OffreFormationDTO {
 	private String titre;
 	private String description;
 	private LocalDate dateDebut;
 	private LocalDate dateFin;
-
-	// PRESENTIEL ou EN_LIGNE
 	private String modalite;
-
 	private int nbPlaces;
-
-	// OUVERTE, FERMEE, ANNULEE
-	private String statut;
-
-	@ManyToOne
-	@JoinColumn(name = "domaine_id")
-	private Domaine domaine;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+	private Long domaineId;
 
 	public String getTitre() {
 		return titre;
@@ -91,19 +59,11 @@ public class OffreFormation {
 		this.nbPlaces = nbPlaces;
 	}
 
-	public String getStatut() {
-		return statut;
+	public Long getDomaineId() {
+		return domaineId;
 	}
 
-	public void setStatut(String statut) {
-		this.statut = statut;
-	}
-
-	public Domaine getDomaine() {
-		return domaine;
-	}
-
-	public void setDomaine(Domaine domaine) {
-		this.domaine = domaine;
+	public void setDomaineId(Long domaineId) {
+		this.domaineId = domaineId;
 	}
 }

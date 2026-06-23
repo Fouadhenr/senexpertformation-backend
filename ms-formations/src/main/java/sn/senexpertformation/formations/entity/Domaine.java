@@ -17,26 +17,24 @@ public class Domaine {
 	private String libelle;
 	private String description;
 
-	// Getters
 	public Long getId() {
 		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getLibelle() {
 		return libelle;
 	}
 
-	public String getDescription() {
-		return description;
-	}
-
-	// Setters
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public void setLibelle(String libelle) {
 		this.libelle = libelle;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 
 	public void setDescription(String description) {
