@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pg-formations
+  namespace: senexpertformation
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pg-formations
+  template:
+    metadata:
+      labels:
+        app: pg-formations
+    spec:
+      containers:
+        - name: pg-formations
+          image: postgres:16
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: db_formations
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: senexpert-secret
+                  key: DB_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: senexpert-secret
+                  key: DB_PASSWORD
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: pg-formations-storage
+      volumes:
+        - name: pg-formations-storage
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pg-formations-service
+  namespace: senexpertformation
+spec:
+  selector:
+    app: pg-formations
+  ports:
+    - port: 5432
+      targetPort: 5432

@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pg-utilisateurs
+  namespace: senexpertformation
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pg-utilisateurs
+  template:
+    metadata:
+      labels:
+        app: pg-utilisateurs
+    spec:
+      containers:
+        - name: pg-utilisateurs
+          image: postgres:16
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: db_utilisateurs
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: senexpert-secret
+                  key: DB_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: senexpert-secret
+                  key: DB_PASSWORD
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: pg-utilisateurs-storage
+      volumes:
+        - name: pg-utilisateurs-storage
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pg-utilisateurs-service
+  namespace: senexpertformation
+spec:
+  selector:
+    app: pg-utilisateurs
+  ports:
+    - port: 5432
+      targetPort: 5432

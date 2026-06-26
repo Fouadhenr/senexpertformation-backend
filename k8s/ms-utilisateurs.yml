@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-utilisateurs
+  namespace: senexpertformation
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-utilisateurs
+  template:
+    metadata:
+      labels:
+        app: ms-utilisateurs
+    spec:
+      containers:
+        - name: ms-utilisateurs
+          image: senexpertformation-ms-utilisateurs:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8081
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: senexpert-config
+                  key: DB_HOST_UTILISATEURS
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: senexpert-config
+                  key: DB_PORT_UTILISATEURS
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: senexpert-config
+                  key: DB_NAME_UTILISATEURS
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: senexpert-secret
+                  key: DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: senexpert-secret
+                  key: DB_PASSWORD
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ms-utilisateurs-service
+  namespace: senexpertformation
+spec:
+  type: NodePort
+  selector:
+    app: ms-utilisateurs
+  ports:
+    - port: 8081
+      targetPort: 8081
+      nodePort: 30081

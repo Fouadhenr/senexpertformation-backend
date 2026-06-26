@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: senexpert-config
+  namespace: senexpertformation
+data:
+  # Config base utilisateurs
+  DB_HOST_UTILISATEURS: pg-utilisateurs-service
+  DB_PORT_UTILISATEURS: "5432"
+  DB_NAME_UTILISATEURS: db_utilisateurs
+
+  # Config base formations
+  DB_HOST_FORMATIONS: pg-formations-service
+  DB_PORT_FORMATIONS: "5432"
+  DB_NAME_FORMATIONS: db_formations
