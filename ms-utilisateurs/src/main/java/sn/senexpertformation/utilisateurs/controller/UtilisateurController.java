@@ -49,6 +49,12 @@ public class UtilisateurController {
 		return new ResponseEntity<>(saved, HttpStatus.CREATED);
 	}
 
+	// ===================== LISTER TOUTES LES INSTITUTIONS =====================
+	@GetMapping("/institutions")
+	public ResponseEntity<List<Institution>> getAllInstitutions() {
+		return ResponseEntity.ok(utilisateurService.getAllInstitutions());
+	}
+
 	@PutMapping("/institutions/{id}/valider")
 	public ResponseEntity<Institution> validerInstitution(@PathVariable Long id) {
 		Institution institution = utilisateurService.validerInstitution(id);

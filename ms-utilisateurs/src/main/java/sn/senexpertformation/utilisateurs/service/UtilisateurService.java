@@ -170,4 +170,8 @@ public class UtilisateurService {
 		return institutionRepository.findById(id)
 				.orElseThrow(() -> new RuntimeException("Institution non trouvée avec l'id: " + id));
 	}
+
+	public List<Institution> getAllInstitutions() {
+		return institutionRepository.findAll();
+	}
 }
